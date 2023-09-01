@@ -7,11 +7,34 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     
     
+    
     <style>
         #network {
             width: 800px; /* Largeur du réseau */
             height: 600px; /* Hauteur du réseau */
         }
+        
+        .context-menu {
+	    position: absolute;
+	    background-color: yellow;
+	    border: 1px solid #ccc;
+	    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	    z-index: 1000;
+	    padding: 4px;
+	    cursor: default;
+	}
+
+	.context-menu a {
+	    display: block;
+	    padding: 6px 12px;
+	    text-decoration: none;
+	    color: black;
+	}
+
+	.context-menu a:hover {
+	    background-color: #f0f0f0;
+	}
+
     </style>
 </head>
 <body>
@@ -61,5 +84,77 @@
 	// Créer le réseau vis.js
 	const network = new vis.Network(container, data, options);
     </script>
+    
+    <script>
+    	// Créez une variable pour stocker le nœud actuellement sélectionné (clic droit)
+	let selectedNodeId = null;
+
+	// Écoutez le clic droit sur le conteneur du réseau
+	container.addEventListener("contextmenu", function (e) {
+	    e.preventDefault(); // Empêche le menu contextuel par défaut du navigateur de s'afficher
+
+	    // Vérifiez si un nœud a été cliqué avec le bouton droit de la souris
+	    const clickedNodeId = network.getNodeAt(e);
+
+	    if (clickedNodeId !== undefined) {
+		selectedNodeId = clickedNodeId; // Stockez l'ID du nœud cliqué
+		// Affichez votre menu contextuel personnalisé ici
+		showContextMenu(e.clientX, e.clientY);
+	    }
+	});
+
+	// Fonction pour afficher le menu contextuel personnalisé
+	function showContextMenu(x, y) {
+	    const contextMenu = document.createElement("div");
+	    contextMenu.className = "context-menu";
+	    contextMenu.style.left = x + "px";
+	    contextMenu.style.top = y + "px";
+
+	    // Créez des options de menu contextuel personnalisées sous forme d'hyperliens
+	    const option1 = document.createElement("a");
+	    option1.href = "#";
+	    option1.textContent = "Médicaments";
+	    option1.addEventListener("click", function (e) {
+		e.preventDefault();
+		// Code à exécuter lorsque vous cliquez sur l'option 1
+		alert("Médicaments, cliqué pour le nœud : " + selectedNodeId);
+		contextMenu.remove(); // Supprimez le menu après avoir cliqué sur une option
+	    });
+
+	    // Créez d'autres options de menu contextuel de la même manière
+	    const option2 = document.createElement("a");
+	    option2.href = "#";
+	    option2.textContent = "Mécanismes";
+	    option2.addEventListener("click", function (e) {
+		e.preventDefault();
+		// Code à exécuter lorsque vous cliquez sur l'option 1
+		alert("Mécanismes, cliqué pour le nœud : " + selectedNodeId);
+		contextMenu.remove(); // Supprimez le menu après avoir cliqué sur une option
+	    });
+	    
+	    contextMenu.appendChild(option1);
+	    // Ajoutez d'autres options de menu contextuel si nécessaire
+	    contextMenu.appendChild(option2);
+
+	    // Ajoutez le menu au corps du document
+	    document.body.appendChild(contextMenu);
+
+	    // Écoutez le clic en dehors du menu pour le fermer
+	    document.addEventListener("click", function (e) {
+		if (!contextMenu.contains(e.target)) {
+		    contextMenu.remove();
+		}
+	    });
+
+	    // Écoutez la touche Échappe (Escape) pour fermer le menu
+	    document.addEventListener("keydown", function (e) {
+		if (e.key === "Escape") {
+		    contextMenu.remove();
+		}
+	    });
+	}
+
+    </script>
+    
 </body>
 </html>
