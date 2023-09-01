@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Relation entre l'asthme et les produits naturels</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    
+    
+    <style>
+        #network {
+            width: 800px; /* Largeur du réseau */
+            height: 600px; /* Hauteur du réseau */
+        }
+    </style>
+</head>
+<body>
+    <div id="network"></div>
+    <script>
+        // Données de base
+	const nodes = [
+	     { id: "c1", label: "Asthme", color: { background: "red", border: "black", highlight: { background: "red", border: "black" } }, font: { color: "white" } },
+	     { id: "c2", label: "Allergie", color: { background: "red", border: "black", highlight: { background: "red", border: "black" } }, font: { color: "white" } },
+	    { id: "p1", label: "NAC" },
+	    { id: "p2", label: "Eucalyptus \nglobulus" },
+	    { id: "p3", label: "Huile de \ncumin noir" },
+	    { id: "p4", label: "Eucalyptus \nradiata" },
+	    { id: "p5", label: "Curcuma" },
+	    { id: "p6", label: "Quercetine" },
+	    { id: "p7", label: "Bromélaïne" },
+	    { id: "p8", label: "Ortie" },
+	    { id: "p9", label: "Reishi" },
+	];
+
+	const edges = [
+	    { from: "c2", to: "c1", arrows: "to", dashes: true, color: { color: "lightgray", highlight: "lightgray" } },
+	    { from: "c1", to: "p1" },  // Asthme -> NAC
+	    { from: "c1", to: "p2" },  // Asthme -> Eucalyptus globulus
+	    { from: "c1", to: "p3" },  // Asthme -> Huile de cumin noir
+	    { from: "c1", to: "p4" },  // Asthme -> Eucalyptus radiata
+	    { from: "c1", to: "p5" },  // Asthme -> Curcuma
+	    { from: "c2", to: "p1" },
+	    { from: "c2", to: "p6" },
+	    { from: "c2", to: "p7" },
+	    { from: "c2", to: "p8" },
+	    { from: "c2", to: "p9" },
+	];
+
+	// Créer un objet DataSet pour les nœuds et les arêtes
+	const nodeDataSet = new vis.DataSet(nodes);
+	const edgeDataSet = new vis.DataSet(edges);
+
+	// Créer une configuration pour le réseau
+	const container = document.getElementById("network");
+	const data = {
+	    nodes: nodeDataSet,
+	    edges: edgeDataSet,
+	};
+	const options = {};
+
+	// Créer le réseau vis.js
+	const network = new vis.Network(container, data, options);
+    </script>
+</body>
+</html>
